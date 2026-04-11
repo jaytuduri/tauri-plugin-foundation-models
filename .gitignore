@@ -1,0 +1,6 @@
+target/
+dist-js/
+node_modules/
+swift/.build/
+swift/Package.resolved
+*.DS_Store

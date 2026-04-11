@@ -1,0 +1,11 @@
+"$schema" = "schemas/schema.json"
+
+[[permission]]
+identifier = "allow-generate"
+description = "Allows one-shot text generation."
+commands.allow = ["generate"]
+
+[[permission]]
+identifier = "allow-generate-stream"
+description = "Allows streaming text generation."
+commands.allow = ["generate_stream"]

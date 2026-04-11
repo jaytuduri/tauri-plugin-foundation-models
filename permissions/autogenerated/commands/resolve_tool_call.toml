@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-resolve-tool-call"
+description = "Enables the resolve_tool_call command without any pre-configured scope."
+commands.allow = ["resolve_tool_call"]
+
+[[permission]]
+identifier = "deny-resolve-tool-call"
+description = "Denies the resolve_tool_call command without any pre-configured scope."
+commands.deny = ["resolve_tool_call"]

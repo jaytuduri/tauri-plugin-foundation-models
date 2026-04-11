@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-respond-stream"
+description = "Enables the respond_stream command without any pre-configured scope."
+commands.allow = ["respond_stream"]
+
+[[permission]]
+identifier = "deny-respond-stream"
+description = "Denies the respond_stream command without any pre-configured scope."
+commands.deny = ["respond_stream"]

@@ -1,0 +1,14 @@
+"$schema" = "schemas/schema.json"
+
+[default]
+description = "Default permissions for the Apple Intelligence plugin — grants access to all commands needed for typical use."
+permissions = [
+    "allow-availability",
+    "allow-generate",
+    "allow-generate-stream",
+    "allow-create-session",
+    "allow-respond",
+    "allow-respond-stream",
+    "allow-close-session",
+    "allow-resolve-tool-call",
+]

@@ -1,0 +1,34 @@
+{
+  "name": "tauri-plugin-apple-intelligence-api",
+  "version": "0.1.0",
+  "description": "Frontend bindings for the Apple Intelligence Tauri plugin (macOS 26+)",
+  "license": "MIT OR Apache-2.0",
+  "type": "module",
+  "main": "./dist-js/index.cjs",
+  "module": "./dist-js/index.js",
+  "types": "./dist-js/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist-js/index.d.ts",
+      "import": "./dist-js/index.js",
+      "require": "./dist-js/index.cjs"
+    }
+  },
+  "files": [
+    "dist-js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2"
+  },
+  "devDependencies": {
+    "rollup": "^4",
+    "@rollup/plugin-typescript": "^12",
+    "tslib": "^2",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,6 @@
+"$schema" = "schemas/schema.json"
+
+[[permission]]
+identifier = "allow-resolve-tool-call"
+description = "Allows the frontend to resolve a pending tool call from the model."
+commands.allow = ["resolve_tool_call"]

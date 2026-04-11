@@ -1,0 +1,6 @@
+"$schema" = "schemas/schema.json"
+
+[[permission]]
+identifier = "allow-availability"
+description = "Allows checking Apple Intelligence availability."
+commands.allow = ["availability"]

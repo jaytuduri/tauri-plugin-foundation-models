@@ -1,0 +1,21 @@
+"$schema" = "schemas/schema.json"
+
+[[permission]]
+identifier = "allow-create-session"
+description = "Allows creating a stateful language model session."
+commands.allow = ["create_session"]
+
+[[permission]]
+identifier = "allow-respond"
+description = "Allows sending a prompt to an existing session."
+commands.allow = ["respond"]
+
+[[permission]]
+identifier = "allow-respond-stream"
+description = "Allows sending a streaming prompt to an existing session."
+commands.allow = ["respond_stream"]
+
+[[permission]]
+identifier = "allow-close-session"
+description = "Allows closing an existing session."
+commands.allow = ["close_session"]
