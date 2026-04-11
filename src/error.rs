@@ -6,6 +6,9 @@ pub enum Error {
     Unavailable(String),
     #[error("session {0} not found")]
     SessionNotFound(u64),
+    /// The session's context window was exceeded. Start a new session.
+    #[error("context window exceeded")]
+    ContextWindowExceeded,
     #[error("FoundationModels error: {0}")]
     Native(String),
     #[error("invalid input: {0}")]

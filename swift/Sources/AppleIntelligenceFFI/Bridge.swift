@@ -97,7 +97,7 @@ public func ai_respond(
             let text = response.content
             text.withCString { completion(ctx, 0, $0) }
         } catch {
-            let msg = "\(error)"
+            let msg = errorMessage(error)
             msg.withCString { completion(ctx, 1, $0) }
         }
     }
@@ -137,7 +137,7 @@ public func ai_respond_stream(
             }
             lastFull.withCString { completion(ctx, 0, $0) }
         } catch {
-            let msg = "\(error)"
+            let msg = errorMessage(error)
             msg.withCString { completion(ctx, 1, $0) }
         }
     }
@@ -166,6 +166,18 @@ public func ai_resolve_tool_call(
 }
 
 // MARK: - Helpers
+
+/// Maps FoundationModels errors to well-known strings the Rust side can pattern-match.
+private func errorMessage(_ error: Error) -> String {
+    if let genError = error as? LanguageModelSession.GenerationError {
+        switch genError {
+        case .exceededContextWindowSize: return "exceededContextWindowSize"
+        case .unsupportedLanguageOrLocale: return "unsupportedLanguageOrLocale"
+        default: break
+        }
+    }
+    return "\(error)"
+}
 
 private func parseOptions(_ json: String) -> GenerationOptions {
     guard !json.isEmpty,

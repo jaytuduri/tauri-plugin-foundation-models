@@ -23,7 +23,6 @@ pub const TOOL_CALL_EVENT: &str = "apple-intelligence://tool-call";
 pub struct GenerationOptions {
     pub temperature: Option<f64>,
     pub maximum_response_tokens: Option<u32>,
-    pub seed: Option<u64>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -71,6 +70,14 @@ unsafe fn read_cstr(ptr: *const c_char) -> String {
         return String::new();
     }
     CStr::from_ptr(ptr).to_string_lossy().into_owned()
+}
+
+/// Converts a native error string from the Swift bridge into a typed Error.
+fn map_native_error(msg: String) -> Error {
+    match msg.as_str() {
+        "exceededContextWindowSize" => Error::ContextWindowExceeded,
+        _ => Error::Native(msg),
+    }
 }
 
 // ── Commands ─────────────────────────────────────────────────────────────
@@ -162,7 +169,7 @@ async fn respond_inner(
         return Err(Error::Native(format!("ai_respond returned {status}")));
     }
     let payload = rx.await.map_err(|_| Error::Native("completion channel dropped".into()))?;
-    if payload.ok { Ok(payload.text) } else { Err(Error::Native(payload.text)) }
+    if payload.ok { Ok(payload.text) } else { Err(map_native_error(payload.text)) }
 }
 
 #[command]
@@ -235,7 +242,7 @@ async fn respond_stream_inner(
     });
 
     let payload = done_rx.await.map_err(|_| Error::Native("stream completion channel dropped".into()))?;
-    if payload.ok { Ok(payload.text) } else { Err(Error::Native(payload.text)) }
+    if payload.ok { Ok(payload.text) } else { Err(map_native_error(payload.text)) }
 }
 
 #[command]

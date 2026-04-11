@@ -17,7 +17,6 @@ export type AvailabilityStatus =
 export interface GenerationOptions {
   temperature?: number
   maximumResponseTokens?: number
-  seed?: number
 }
 
 export interface ToolSpec {
