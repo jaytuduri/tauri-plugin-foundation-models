@@ -9,6 +9,8 @@ pub enum Error {
     /// The session's context window was exceeded. Start a new session.
     #[error("context window exceeded")]
     ContextWindowExceeded,
+    #[error("unsupported language or locale")]
+    UnsupportedLanguageOrLocale,
     #[error("FoundationModels error: {0}")]
     Native(String),
     #[error("invalid input: {0}")]

@@ -170,10 +170,11 @@ public func ai_resolve_tool_call(
 /// Maps FoundationModels errors to well-known strings the Rust side can pattern-match.
 private func errorMessage(_ error: Error) -> String {
     if let genError = error as? LanguageModelSession.GenerationError {
+        // String literals must stay in sync with map_native_error() in commands.rs.
         switch genError {
         case .exceededContextWindowSize: return "exceededContextWindowSize"
         case .unsupportedLanguageOrLocale: return "unsupportedLanguageOrLocale"
-        default: break
+        @unknown default: break
         }
     }
     return "\(error)"

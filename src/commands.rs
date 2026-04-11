@@ -73,9 +73,12 @@ unsafe fn read_cstr(ptr: *const c_char) -> String {
 }
 
 /// Converts a native error string from the Swift bridge into a typed Error.
+// Maps well-known error strings from Bridge.swift to typed variants.
+// String literals here must stay in sync with errorMessage() in Bridge.swift.
 fn map_native_error(msg: String) -> Error {
     match msg.as_str() {
         "exceededContextWindowSize" => Error::ContextWindowExceeded,
+        "unsupportedLanguageOrLocale" => Error::UnsupportedLanguageOrLocale,
         _ => Error::Native(msg),
     }
 }
