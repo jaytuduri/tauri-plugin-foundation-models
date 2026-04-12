@@ -54,7 +54,7 @@ if (!status.available) return
 const reply = await generate('Summarise this article: ' + text)
 
 // Streaming
-await generateStream('Explain recursion.', (chunk) => process.stdout.write(chunk))
+const full = await generateStream('Explain recursion.', (chunk) => console.log(chunk))
 
 // Stateful session
 const session = await createSession({
@@ -65,7 +65,7 @@ const b = await session.respond('Give me a TypeScript example.')
 await session.close()
 
 // Tool calling
-const session = await createSession({
+const toolSession = await createSession({
   tools: [{
     name: 'get_weather',
     description: 'Get weather for a city. Pass args as JSON string, e.g. {"city":"London"}.',
@@ -80,7 +80,7 @@ const unlisten = await registerToolHandlers({
   },
 })
 
-const response = await session.respond('What is the weather in Tokyo?')
+const response = await toolSession.respond('What is the weather in Tokyo?')
 unlisten()
 ```
 
