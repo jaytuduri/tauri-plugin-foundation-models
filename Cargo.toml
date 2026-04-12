@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "Tauri plugin exposing Apple Intelligence on-device Foundation Models on macOS 26+"
 license = "MIT OR Apache-2.0"
-links = "AppleIntelligenceFFI"
+links = "apple-intelligence"
 rust-version = "1.77"
 
 [package.metadata.docs.rs]

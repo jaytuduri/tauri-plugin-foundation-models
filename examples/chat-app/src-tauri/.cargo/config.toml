@@ -1,0 +1,4 @@
+[env]
+# FoundationModels requires macOS 26+; without this the linker targets macOS 11
+# and can't resolve Swift 6 concurrency symbols.
+MACOSX_DEPLOYMENT_TARGET = "26.0"

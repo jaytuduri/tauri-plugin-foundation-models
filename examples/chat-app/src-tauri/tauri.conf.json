@@ -1,0 +1,30 @@
+{
+  "productName": "Apple Intelligence Chat",
+  "version": "0.1.0",
+  "identifier": "dev.ikn.ai-chat",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Apple Intelligence Chat",
+        "width": 780,
+        "height": 640,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": ["icons/icon.png"]
+  }
+}

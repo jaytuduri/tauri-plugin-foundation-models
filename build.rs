@@ -67,7 +67,11 @@ fn main() {
     println!("cargo:rustc-link-lib=framework=Foundation");
     println!("cargo:rustc-link-lib=framework=FoundationModels");
 
-    // Swift runtime (needed because we link a Swift static archive).
+    // Swift concurrency runtime — resolved from the macOS dyld shared cache.
+    // Do NOT add the toolchain's swift-5.5/ path: those are back-deployment
+    // stubs that lack Swift 6 symbols (withCheckedContinuation(isolation:)).
+    println!("cargo:rustc-link-lib=dylib=swift_Concurrency");
+    println!("cargo:rustc-link-lib=dylib=swiftCore");
     println!("cargo:rustc-link-arg=-Wl,-rpath,/usr/lib/swift");
     println!("cargo:rustc-link-search=native=/usr/lib/swift");
 }
