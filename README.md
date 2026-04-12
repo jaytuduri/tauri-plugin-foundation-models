@@ -17,14 +17,14 @@ Tauri v2 plugin for Apple's on-device [Foundation Models](https://developer.appl
 
 ```toml
 [target.'cfg(target_os = "macos")'.dependencies]
-tauri-plugin-apple-intelligence = { git = "https://github.com/jaytuduri/tauri-plugin-foundation-models" }
+tauri-plugin-foundation-models = { git = "https://github.com/jaytuduri/tauri-plugin-foundation-models" }
 ```
 
 `src-tauri/src/lib.rs`:
 
 ```rust
 tauri::Builder::default()
-    .plugin(tauri_plugin_apple_intelligence::init())
+    .plugin(tauri_plugin_foundation_models::init())
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 ```
@@ -32,7 +32,7 @@ tauri::Builder::default()
 `src-tauri/capabilities/default.json`:
 
 ```json
-{ "permissions": ["apple-intelligence:default"] }
+{ "permissions": ["foundation-models:default"] }
 ```
 
 JavaScript:
@@ -44,7 +44,7 @@ npm install github:jaytuduri/tauri-plugin-foundation-models
 ## Usage
 
 ```typescript
-import { availability, generate, generateStream, createSession, registerToolHandlers } from 'tauri-plugin-apple-intelligence-api'
+import { availability, generate, generateStream, createSession, registerToolHandlers } from 'tauri-plugin-foundation-models-api'
 
 // Check availability first
 const status = await availability()

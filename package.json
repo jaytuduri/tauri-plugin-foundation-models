@@ -1,7 +1,7 @@
 {
-  "name": "tauri-plugin-apple-intelligence-api",
+  "name": "tauri-plugin-foundation-models-api",
   "version": "0.1.0",
-  "description": "Frontend bindings for the Apple Intelligence Tauri plugin (macOS 26+)",
+  "description": "Frontend bindings for tauri-plugin-foundation-models — Apple Intelligence on-device models for macOS 26+",
   "license": "MIT OR Apache-2.0",
   "type": "module",
   "main": "./dist-js/index.cjs",

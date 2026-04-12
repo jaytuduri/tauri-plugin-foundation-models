@@ -13,7 +13,7 @@ use tauri::{
 };
 
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-    Builder::new("apple-intelligence")
+    Builder::new("foundation-models")
         .invoke_handler(tauri::generate_handler![
             commands::availability,
             commands::generate,

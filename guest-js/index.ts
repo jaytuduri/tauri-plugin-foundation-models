@@ -2,7 +2,7 @@ import { invoke, Channel } from '@tauri-apps/api/core'
 import { listen, type UnlistenFn } from '@tauri-apps/api/event'
 
 /** Must match `TOOL_CALL_EVENT` in src/commands.rs */
-const TOOL_CALL_EVENT = 'apple-intelligence://tool-call'
+const TOOL_CALL_EVENT = 'foundation-models://tool-call'
 
 export type UnavailabilityReason =
   | 'deviceNotEligible'
@@ -41,7 +41,7 @@ export type ToolHandler = (args: unknown) => unknown | Promise<unknown>
 
 /** Check whether Apple Intelligence is available on this device. */
 export async function availability(): Promise<AvailabilityStatus> {
-  return invoke<AvailabilityStatus>('plugin:apple-intelligence|availability')
+  return invoke<AvailabilityStatus>('plugin:foundation-models|availability')
 }
 
 /** One-shot, stateless text generation. */
@@ -49,7 +49,7 @@ export async function generate(
   prompt: string,
   options?: GenerationOptions
 ): Promise<string> {
-  return invoke<string>('plugin:apple-intelligence|generate', { prompt, options })
+  return invoke<string>('plugin:foundation-models|generate', { prompt, options })
 }
 
 /** Stateless streaming generation. `onChunk` receives incremental text deltas. */
@@ -60,7 +60,7 @@ export async function generateStream(
 ): Promise<string> {
   const channel = new Channel<string>()
   channel.onmessage = onChunk
-  return invoke<string>('plugin:apple-intelligence|generate_stream', {
+  return invoke<string>('plugin:foundation-models|generate_stream', {
     prompt,
     options,
     onToken: channel,
@@ -69,7 +69,7 @@ export async function generateStream(
 
 /** Create a stateful chat session. Returns a handle with respond/stream/close. */
 export async function createSession(config: SessionConfig = {}): Promise<Session> {
-  const id = await invoke<number>('plugin:apple-intelligence|create_session', { config })
+  const id = await invoke<number>('plugin:foundation-models|create_session', { config })
   return new Session(id)
 }
 
@@ -77,7 +77,7 @@ export class Session {
   constructor(public readonly id: number) {}
 
   respond(prompt: string, options?: GenerationOptions): Promise<string> {
-    return invoke<string>('plugin:apple-intelligence|respond', {
+    return invoke<string>('plugin:foundation-models|respond', {
       sessionId: this.id,
       prompt,
       options,
@@ -91,7 +91,7 @@ export class Session {
   ): Promise<string> {
     const channel = new Channel<string>()
     channel.onmessage = onChunk
-    return invoke<string>('plugin:apple-intelligence|respond_stream', {
+    return invoke<string>('plugin:foundation-models|respond_stream', {
       sessionId: this.id,
       prompt,
       options,
@@ -100,7 +100,7 @@ export class Session {
   }
 
   close(): Promise<void> {
-    return invoke<void>('plugin:apple-intelligence|close_session', { sessionId: this.id })
+    return invoke<void>('plugin:foundation-models|close_session', { sessionId: this.id })
   }
 }
 
@@ -119,18 +119,18 @@ export async function registerToolHandlers(
     const { callId, name, arguments: args } = event.payload
     const handler = handlers[name]
     if (!handler) {
-      await invoke('plugin:apple-intelligence|resolve_tool_call', {
+      await invoke('plugin:foundation-models|resolve_tool_call', {
         payload: { callId, result: { error: `unknown tool: ${name}` }, isError: true },
       })
       return
     }
     try {
       const result = await handler(args)
-      await invoke('plugin:apple-intelligence|resolve_tool_call', {
+      await invoke('plugin:foundation-models|resolve_tool_call', {
         payload: { callId, result, isError: false },
       })
     } catch (err) {
-      await invoke('plugin:apple-intelligence|resolve_tool_call', {
+      await invoke('plugin:foundation-models|resolve_tool_call', {
         payload: { callId, result: { error: String(err) }, isError: true },
       })
     }

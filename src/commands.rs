@@ -14,7 +14,7 @@ use crate::session::{next_ctx_id, CompletionPayload, StreamSink, PENDING_COMPLET
 
 /// Tauri event name emitted when the model invokes a tool.
 /// Must match the listener in guest-js/index.ts.
-pub const TOOL_CALL_EVENT: &str = "apple-intelligence://tool-call";
+pub const TOOL_CALL_EVENT: &str = "foundation-models://tool-call";
 
 // ── Input types ──────────────────────────────────────────────────────────
 

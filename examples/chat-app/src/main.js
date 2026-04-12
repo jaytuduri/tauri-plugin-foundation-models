@@ -1,4 +1,4 @@
-import { availability, createSession } from 'tauri-plugin-apple-intelligence-api'
+import { availability, createSession } from 'tauri-plugin-foundation-models-api'
 
 const dot       = document.getElementById('dot')
 const statusLbl = document.getElementById('status-label')

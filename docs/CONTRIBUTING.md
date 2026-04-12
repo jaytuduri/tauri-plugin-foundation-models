@@ -59,7 +59,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for a detailed breakdown of the source 
 
 ## Adding a new permission scope
 
-Permission files live in `permissions/`. Each file grants access to one or more commands. The `default.toml` bundles all permissions for typical use. For fine-grained access, apps can reference individual permission identifiers like `apple-intelligence:allow-generate`.
+Permission files live in `permissions/`. Each file grants access to one or more commands. The `default.toml` bundles all permissions for typical use. For fine-grained access, apps can reference individual permission identifiers like `foundation-models:allow-generate`.
 
 ## Code conventions
 

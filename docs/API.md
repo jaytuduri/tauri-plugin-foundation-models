@@ -1,6 +1,6 @@
 # API Reference
 
-Complete reference for the `tauri-plugin-apple-intelligence-api` JavaScript/TypeScript package.
+Complete reference for the `tauri-plugin-foundation-models-api` JavaScript/TypeScript package.
 
 ## Functions
 
@@ -227,18 +227,18 @@ Add permissions to your app's capability file (`src-tauri/capabilities/default.j
 **Grant all** (recommended for most apps):
 
 ```json
-{ "permissions": ["apple-intelligence:default"] }
+{ "permissions": ["foundation-models:default"] }
 ```
 
 **Granular permissions**:
 
 | Permission | Commands |
 |------------|----------|
-| `apple-intelligence:allow-availability` | `availability` |
-| `apple-intelligence:allow-generate` | `generate` |
-| `apple-intelligence:allow-generate-stream` | `generate_stream` |
-| `apple-intelligence:allow-create-session` | `create_session` |
-| `apple-intelligence:allow-respond` | `respond` |
-| `apple-intelligence:allow-respond-stream` | `respond_stream` |
-| `apple-intelligence:allow-close-session` | `close_session` |
-| `apple-intelligence:allow-resolve-tool-call` | `resolve_tool_call` |
+| `foundation-models:allow-availability` | `availability` |
+| `foundation-models:allow-generate` | `generate` |
+| `foundation-models:allow-generate-stream` | `generate_stream` |
+| `foundation-models:allow-create-session` | `create_session` |
+| `foundation-models:allow-respond` | `respond` |
+| `foundation-models:allow-respond-stream` | `respond_stream` |
+| `foundation-models:allow-close-session` | `close_session` |
+| `foundation-models:allow-resolve-tool-call` | `resolve_tool_call` |
