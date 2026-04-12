@@ -31,6 +31,9 @@ public func ai_free_string(_ ptr: UnsafeMutablePointer<CChar>?) {
 
 @_cdecl("ai_availability")
 public func ai_availability() -> UnsafeMutablePointer<CChar>? {
+    guard #available(macOS 26, *) else {
+        return cstrdup(#"{"available":false,"reason":"osVersionTooOld"}"#)
+    }
     let model = SystemLanguageModel.default
     let payload: [String: Any]
     switch model.availability {
@@ -58,6 +61,10 @@ public func ai_create_session(
     _ outSessionId: UnsafeMutablePointer<UInt64>?,
     _ outError: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?
 ) -> Int32 {
+    guard #available(macOS 26, *) else {
+        outError?.pointee = cstrdup("osVersionTooOld")
+        return 1
+    }
     let json = stringFromC(instructionsJson)
     let cfg = (try? JSONSerialization.jsonObject(with: Data(json.utf8))) as? [String: Any] ?? [:]
     let instructions = cfg["instructions"] as? String
@@ -74,6 +81,7 @@ public func ai_create_session(
 
 @_cdecl("ai_close_session")
 public func ai_close_session(_ sessionId: UInt64) -> Int32 {
+    guard #available(macOS 26, *) else { return 1 }
     return SessionStore.shared.remove(id: sessionId) ? 0 : 1
 }
 
@@ -87,6 +95,10 @@ public func ai_respond(
     _ ctx: UnsafeMutableRawPointer?,
     _ completion: CompletionCallback
 ) -> Int32 {
+    guard #available(macOS 26, *) else {
+        "osVersionTooOld".withCString { completion(ctx, 1, $0) }
+        return 0
+    }
     guard let session = SessionStore.shared.get(id: sessionId) else { return 1 }
     let promptStr = stringFromC(prompt)
     let options = parseOptions(stringFromC(optionsJson))
@@ -113,6 +125,10 @@ public func ai_respond_stream(
     _ token: TokenCallback,
     _ completion: CompletionCallback
 ) -> Int32 {
+    guard #available(macOS 26, *) else {
+        "osVersionTooOld".withCString { completion(ctx, 1, $0) }
+        return 0
+    }
     guard let session = SessionStore.shared.get(id: sessionId) else { return 1 }
     let promptStr = stringFromC(prompt)
     let options = parseOptions(stringFromC(optionsJson))
@@ -151,6 +167,7 @@ public func ai_set_tool_dispatcher(
     _ ctx: UnsafeMutableRawPointer?,
     _ cb: ToolCallCallback
 ) {
+    guard #available(macOS 26, *) else { return }
     ToolDispatcher.shared.install(ctx: ctx, callback: cb)
 }
 
@@ -160,6 +177,7 @@ public func ai_resolve_tool_call(
     _ resultJson: UnsafePointer<CChar>?,
     _ isError: Int32
 ) -> Int32 {
+    guard #available(macOS 26, *) else { return 1 }
     let text = stringFromC(resultJson)
     ToolDispatcher.shared.resolve(callId: callId, result: text, isError: isError != 0)
     return 0

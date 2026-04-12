@@ -8,6 +8,7 @@ export type UnavailabilityReason =
   | 'deviceNotEligible'
   | 'appleIntelligenceNotEnabled'
   | 'modelNotReady'
+  | 'osVersionTooOld'
   | 'other'
 
 export type AvailabilityStatus =

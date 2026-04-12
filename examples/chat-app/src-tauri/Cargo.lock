@@ -306,7 +306,7 @@ version = "0.1.0"
 dependencies = [
  "tauri",
  "tauri-build",
- "tauri-plugin-apple-intelligence",
+ "tauri-plugin-foundation-models",
 ]
 
 [[package]]
@@ -3410,7 +3410,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tauri-plugin-apple-intelligence"
+name = "tauri-plugin-foundation-models"
 version = "0.1.0"
 dependencies = [
  "log",

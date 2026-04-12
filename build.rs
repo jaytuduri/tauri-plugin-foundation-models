@@ -65,7 +65,10 @@ fn main() {
 
     // Link required system frameworks.
     println!("cargo:rustc-link-lib=framework=Foundation");
-    println!("cargo:rustc-link-lib=framework=FoundationModels");
+    // Weak-link FoundationModels so the binary loads on macOS < 26.
+    // The #available guards in Bridge.swift prevent any actual calls.
+    println!("cargo:rustc-link-arg=-weak_framework");
+    println!("cargo:rustc-link-arg=FoundationModels");
 
     // Swift concurrency runtime — resolved from the macOS dyld shared cache.
     // Do NOT add the toolchain's swift-5.5/ path: those are back-deployment
