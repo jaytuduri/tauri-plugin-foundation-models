@@ -32,6 +32,7 @@ export interface SessionConfig {
 }
 
 export interface ToolCallEvent {
+  /** Always 0 in v1 — the FoundationModels Tool protocol does not expose session context. */
   sessionId: number
   callId: number
   name: string
@@ -39,6 +40,12 @@ export interface ToolCallEvent {
 }
 
 export type ToolHandler = (args: unknown) => unknown | Promise<unknown>
+
+function makeChannel(onChunk: (chunk: string) => void): Channel<string> {
+  const channel = new Channel<string>()
+  channel.onmessage = onChunk
+  return channel
+}
 
 /** Check whether Apple Intelligence is available on this device. */
 export async function availability(): Promise<AvailabilityStatus> {
@@ -59,8 +66,7 @@ export async function generateStream(
   onChunk: (chunk: string) => void,
   options?: GenerationOptions
 ): Promise<string> {
-  const channel = new Channel<string>()
-  channel.onmessage = onChunk
+  const channel = makeChannel(onChunk)
   return invoke<string>('plugin:foundation-models|generate_stream', {
     prompt,
     options,
@@ -90,8 +96,7 @@ export class Session {
     onChunk: (chunk: string) => void,
     options?: GenerationOptions
   ): Promise<string> {
-    const channel = new Channel<string>()
-    channel.onmessage = onChunk
+    const channel = makeChannel(onChunk)
     return invoke<string>('plugin:foundation-models|respond_stream', {
       sessionId: this.id,
       prompt,

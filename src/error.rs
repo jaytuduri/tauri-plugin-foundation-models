@@ -2,8 +2,6 @@ use serde::{Serialize, Serializer};
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error("Apple Intelligence not available: {0}")]
-    Unavailable(String),
     #[error("session {0} not found")]
     SessionNotFound(u64),
     /// The session's context window was exceeded. Start a new session.

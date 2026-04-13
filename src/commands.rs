@@ -14,7 +14,7 @@ use crate::session::{next_ctx_id, CompletionPayload, StreamSink, PENDING_COMPLET
 
 /// Tauri event name emitted when the model invokes a tool.
 /// Must match the listener in guest-js/index.ts.
-pub const TOOL_CALL_EVENT: &str = "foundation-models://tool-call";
+pub(crate) const TOOL_CALL_EVENT: &str = "foundation-models://tool-call";
 
 // ── Input types ──────────────────────────────────────────────────────────
 
@@ -25,7 +25,7 @@ pub struct GenerationOptions {
     pub maximum_response_tokens: Option<u32>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ToolSpec {
     pub name: String,
@@ -33,7 +33,7 @@ pub struct ToolSpec {
     pub parameters_schema: serde_json::Value,
 }
 
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Deserialize, Serialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionConfig {
     pub instructions: Option<String>,
@@ -72,9 +72,8 @@ unsafe fn read_cstr(ptr: *const c_char) -> String {
     CStr::from_ptr(ptr).to_string_lossy().into_owned()
 }
 
-/// Converts a native error string from the Swift bridge into a typed Error.
-// Maps well-known error strings from Bridge.swift to typed variants.
-// String literals here must stay in sync with errorMessage() in Bridge.swift.
+/// Maps well-known error strings from Bridge.swift to typed Error variants.
+/// String literals must stay in sync with `errorMessage()` in Bridge.swift.
 fn map_native_error(msg: String) -> Error {
     match msg.as_str() {
         "exceededContextWindowSize" => Error::ContextWindowExceeded,
@@ -95,14 +94,7 @@ pub async fn availability() -> Result<AvailabilityStatus> {
 
 #[command]
 pub async fn create_session(config: SessionConfig) -> Result<u64> {
-    let json = serde_json::to_string(&serde_json::json!({
-        "instructions": config.instructions,
-        "tools": config.tools.iter().map(|t| serde_json::json!({
-            "name": t.name,
-            "description": t.description,
-            "parametersSchema": t.parameters_schema,
-        })).collect::<Vec<_>>(),
-    }))?;
+    let json = serde_json::to_string(&config)?;
     let c_json = to_cstring(&json)?;
     let mut session_id: u64 = 0;
     let mut err_ptr: *mut c_char = ptr::null_mut();

@@ -135,21 +135,19 @@ public func ai_respond_stream(
 
     Task.detached {
         do {
-            var previousCount = 0
+            // streamResponse emits progressively fuller cumulative strings.
+            // Track a String.Index cursor (O(1)) instead of a character count
+            // to avoid the O(n) offsetBy: traversal on every token.
+            var cursor: String.Index? = nil
             var lastFull = ""
             let stream = session.streamResponse(to: promptStr, options: options)
             for try await partial in stream {
-                // streamResponse emits progressively fuller cumulative strings.
-                // Use index arithmetic to slice only the new suffix — avoids
-                // a full String copy on each partial (O(n) per token → O(delta)).
                 let full = partial.content
-                if full.count > previousCount {
-                    let startIdx = full.index(full.startIndex, offsetBy: previousCount)
-                    let delta = full[startIdx...]
-                    String(delta).withCString { token(ctx, $0) }
-                    previousCount = full.count
-                    lastFull = full
-                }
+                let start = cursor ?? full.startIndex
+                guard start < full.endIndex else { continue }
+                String(full[start...]).withCString { token(ctx, $0) }
+                cursor = full.endIndex
+                lastFull = full
             }
             lastFull.withCString { completion(ctx, 0, $0) }
         } catch {
