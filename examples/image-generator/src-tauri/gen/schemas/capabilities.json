@@ -1,0 +1,1 @@
+{"default":{"identifier":"default","description":"Default capabilities for the image generator app","local":true,"windows":["main"],"permissions":["core:default","apple-intelligence:allow-img-availability","apple-intelligence:allow-generate-image"],"platforms":["macOS"]}}
