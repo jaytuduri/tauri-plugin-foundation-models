@@ -343,6 +343,18 @@
           "markdownDescription": "Denies the generate command without any pre-configured scope."
         },
         {
+          "description": "Enables the generate_image command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-generate-image",
+          "markdownDescription": "Enables the generate_image command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the generate_image command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-generate-image",
+          "markdownDescription": "Denies the generate_image command without any pre-configured scope."
+        },
+        {
           "description": "Enables the generate_stream command without any pre-configured scope.",
           "type": "string",
           "const": "allow-generate-stream",
@@ -353,6 +365,18 @@
           "type": "string",
           "const": "deny-generate-stream",
           "markdownDescription": "Denies the generate_stream command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the img_availability command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-img-availability",
+          "markdownDescription": "Enables the img_availability command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the img_availability command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-img-availability",
+          "markdownDescription": "Denies the img_availability command without any pre-configured scope."
         },
         {
           "description": "Enables the resolve_tool_call command without any pre-configured scope.",
@@ -397,10 +421,10 @@
           "markdownDescription": "Allows checking Apple Intelligence availability."
         },
         {
-          "description": "Default permissions for the Apple Intelligence plugin — grants access to all commands needed for typical use.\n#### This default permission set includes:\n\n- `allow-availability`\n- `allow-generate`\n- `allow-generate-stream`\n- `allow-create-session`\n- `allow-respond`\n- `allow-respond-stream`\n- `allow-close-session`\n- `allow-resolve-tool-call`",
+          "description": "Default permissions for the Apple Intelligence plugin — grants access to all commands needed for typical use.\n#### This default permission set includes:\n\n- `allow-availability`\n- `allow-generate`\n- `allow-generate-stream`\n- `allow-create-session`\n- `allow-respond`\n- `allow-respond-stream`\n- `allow-close-session`\n- `allow-resolve-tool-call`\n- `allow-img-availability`\n- `allow-generate-image`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the Apple Intelligence plugin — grants access to all commands needed for typical use.\n#### This default permission set includes:\n\n- `allow-availability`\n- `allow-generate`\n- `allow-generate-stream`\n- `allow-create-session`\n- `allow-respond`\n- `allow-respond-stream`\n- `allow-close-session`\n- `allow-resolve-tool-call`"
+          "markdownDescription": "Default permissions for the Apple Intelligence plugin — grants access to all commands needed for typical use.\n#### This default permission set includes:\n\n- `allow-availability`\n- `allow-generate`\n- `allow-generate-stream`\n- `allow-create-session`\n- `allow-respond`\n- `allow-respond-stream`\n- `allow-close-session`\n- `allow-resolve-tool-call`\n- `allow-img-availability`\n- `allow-generate-image`"
         },
         {
           "description": "Allows one-shot text generation.",
@@ -413,6 +437,18 @@
           "type": "string",
           "const": "allow-generate-stream",
           "markdownDescription": "Allows streaming text generation."
+        },
+        {
+          "description": "Allows checking image generation availability and listing available styles.",
+          "type": "string",
+          "const": "allow-img-availability",
+          "markdownDescription": "Allows checking image generation availability and listing available styles."
+        },
+        {
+          "description": "Allows programmatic on-device image generation via ImagePlayground.",
+          "type": "string",
+          "const": "allow-generate-image",
+          "markdownDescription": "Allows programmatic on-device image generation via ImagePlayground."
         },
         {
           "description": "Allows creating a stateful language model session.",

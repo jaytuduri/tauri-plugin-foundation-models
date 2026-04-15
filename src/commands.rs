@@ -10,11 +10,11 @@ use tokio::sync::{mpsc, oneshot};
 
 use crate::error::{Error, Result};
 use crate::ffi;
-use crate::session::{next_ctx_id, CompletionPayload, StreamSink, PENDING_COMPLETIONS, PENDING_STREAMS};
+use crate::session::{next_ctx_id, CompletionPayload, StreamSink, PENDING_COMPLETIONS, PENDING_STREAMS, PENDING_IMG_GEN};
 
 /// Tauri event name emitted when the model invokes a tool.
 /// Must match the listener in guest-js/index.ts.
-pub(crate) const TOOL_CALL_EVENT: &str = "foundation-models://tool-call";
+pub(crate) const TOOL_CALL_EVENT: &str = "apple-intelligence://tool-call";
 
 // ── Input types ──────────────────────────────────────────────────────────
 
@@ -304,6 +304,154 @@ pub(crate) fn install_tool_call_emitter<R: Runtime>(app: AppHandle<R>) {
     let _ = TOOL_CALL_EMITTER.set(Box::new(move |event: ToolCallEvent| {
         let _ = app.emit(TOOL_CALL_EVENT, event);
     }));
+}
+
+// ── Image generation ─────────────────────────────────────────────────────
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImageConcept {
+    #[serde(rename = "type")]
+    pub concept_type: String,
+    pub value: String,
+}
+
+#[derive(Debug, Deserialize, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct ImageGenerationOptions {
+    /// Style identifier from `img_availability`. Omit or pass `""` for the first available style.
+    pub style_id: Option<String>,
+    /// Number of images to generate (1–4). Defaults to 1.
+    pub limit: Option<u32>,
+    /// `"high"` for more variety when generating multiple images. Requires macOS 26.4+.
+    pub creation_variety: Option<String>,
+    /// `"enabled"` or `"disabled"`. Requires macOS 26.4+.
+    pub personalization: Option<String>,
+}
+
+/// Options forwarded to Swift (only creation_variety / personalization).
+#[derive(Debug, Serialize, Default)]
+#[serde(rename_all = "camelCase")]
+struct SwiftImageOptions {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    creation_variety: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    personalization: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImageStyle {
+    pub id: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImageAvailabilityStatus {
+    pub available: bool,
+    pub reason: Option<String>,
+    #[serde(default)]
+    pub styles: Vec<ImageStyle>,
+}
+
+fn map_img_error(msg: String) -> Error {
+    match msg.as_str() {
+        "notSupported" => Error::ImageNotSupported,
+        "creationFailed" => Error::ImageCreationFailed,
+        "faceInImageTooSmall" => Error::ImageFaceInImageTooSmall,
+        "noConceptsProvided" => Error::InvalidInput("no concepts provided".into()),
+        "noStylesAvailable" => Error::InvalidInput("no image styles available on this device".into()),
+        "styleNotFound" => Error::InvalidInput("requested style id not found".into()),
+        _ => Error::Native(msg),
+    }
+}
+
+extern "C" fn img_trampoline(ctx: *mut c_void, image_json: *const c_char) {
+    let ctx_id = ctx as u64;
+    let json = unsafe { read_cstr(image_json) };
+    if json.is_empty() { return; }
+    if let Some(sink) = PENDING_IMG_GEN.lock().unwrap().get(&ctx_id) {
+        let _ = sink.tokens.send(json);
+    }
+}
+
+extern "C" fn img_completion_trampoline(ctx: *mut c_void, status: c_int, payload: *const c_char) {
+    let ctx_id = ctx as u64;
+    let text = unsafe { read_cstr(payload) };
+    if let Some(sink) = PENDING_IMG_GEN.lock().unwrap().remove(&ctx_id) {
+        let _ = sink.done.send(CompletionPayload { ok: status == 0, text });
+    }
+}
+
+#[command]
+pub async fn img_availability() -> Result<ImageAvailabilityStatus> {
+    let (tx, rx) = oneshot::channel::<CompletionPayload>();
+    let ctx_id = next_ctx_id();
+    PENDING_COMPLETIONS.lock().unwrap().insert(ctx_id, tx);
+    let status = unsafe { ffi::img_availability(ctx_id as *mut c_void, completion_trampoline) };
+    if status != 0 {
+        PENDING_COMPLETIONS.lock().unwrap().remove(&ctx_id);
+        return Err(Error::Native("img_availability returned non-zero".into()));
+    }
+    let payload = rx.await.map_err(|_| Error::Native("img availability channel dropped".into()))?;
+    if payload.ok {
+        Ok(serde_json::from_str(&payload.text)?)
+    } else {
+        Err(map_img_error(payload.text))
+    }
+}
+
+#[command]
+pub async fn generate_image(
+    concepts: Vec<ImageConcept>,
+    options: Option<ImageGenerationOptions>,
+    on_image: Channel<String>,
+) -> Result<u32> {
+    let opts = options.unwrap_or_default();
+    let style_id = opts.style_id.as_deref().unwrap_or("");
+    let limit = opts.limit.unwrap_or(1).min(4) as i32;
+    let swift_opts = SwiftImageOptions {
+        creation_variety: opts.creation_variety,
+        personalization: opts.personalization,
+    };
+
+    let c_concepts = to_cstring(&serde_json::to_string(&concepts)?)?;
+    let c_style    = to_cstring(style_id)?;
+    let c_opts     = to_cstring(&serde_json::to_string(&swift_opts)?)?;
+
+    let (img_tx, mut img_rx) = mpsc::unbounded_channel::<String>();
+    let (done_tx, done_rx)   = oneshot::channel::<CompletionPayload>();
+    let ctx_id = next_ctx_id();
+    PENDING_IMG_GEN.lock().unwrap().insert(ctx_id, StreamSink { tokens: img_tx, done: done_tx });
+
+    let status = unsafe {
+        ffi::img_generate(
+            c_concepts.as_ptr(),
+            c_style.as_ptr(),
+            limit,
+            c_opts.as_ptr(),
+            ctx_id as *mut c_void,
+            img_trampoline,
+            img_completion_trampoline,
+        )
+    };
+    if status != 0 {
+        PENDING_IMG_GEN.lock().unwrap().remove(&ctx_id);
+        return Err(Error::Native(format!("img_generate returned {status}")));
+    }
+
+    tokio::spawn(async move {
+        while let Some(image_json) = img_rx.recv().await {
+            let _ = on_image.send(image_json);
+        }
+    });
+
+    let payload = done_rx.await.map_err(|_| Error::Native("img generation channel dropped".into()))?;
+    if !payload.ok {
+        return Err(map_img_error(payload.text));
+    }
+    let v: serde_json::Value = serde_json::from_str(&payload.text)?;
+    Ok(v["count"].as_u64().unwrap_or(0) as u32)
 }
 
 pub(crate) extern "C" fn tool_dispatcher_trampoline(

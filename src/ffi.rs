@@ -10,6 +10,9 @@ use std::os::raw::{c_char, c_int, c_void};
 pub type TokenCallback = extern "C" fn(ctx: *mut c_void, chunk: *const c_char);
 pub type CompletionCallback =
     extern "C" fn(ctx: *mut c_void, status: c_int, payload: *const c_char);
+/// Fires once per generated image; payload is a JSON string
+/// `{"index":<u32>,"dataBase64":"<base64-png>"}`.
+pub type ImageCallback = TokenCallback;
 pub type ToolCallCallback = extern "C" fn(
     ctx: *mut c_void,
     session_id: u64,
@@ -64,5 +67,25 @@ extern "C" {
         call_id: u64,
         result_json: *const c_char,
         is_error: c_int,
+    ) -> c_int;
+
+    // ── Image generation (ImagePlayground) ───────────────────────────────
+
+    /// Async. Initializes `ImageCreator` and fires `completion` with:
+    /// `{"available":true,"styles":[{"id":"..."}]}` or `{"available":false,"reason":"..."}`.
+    /// Status is always 0 unless an unexpected init error occurs.
+    pub fn img_availability(ctx: *mut c_void, completion: CompletionCallback) -> c_int;
+
+    /// Async. Generates images and fires `image_callback` per image with
+    /// `{"index":<u32>,"dataBase64":"<base64-png>"}`, then fires `completion`
+    /// with `{"count":<u32>}` on success or an error string on failure.
+    pub fn img_generate(
+        concepts_json: *const c_char,
+        style_id: *const c_char,
+        limit: c_int,
+        options_json: *const c_char,
+        ctx: *mut c_void,
+        image_callback: ImageCallback,
+        completion: CompletionCallback,
     ) -> c_int;
 }

@@ -6,6 +6,6 @@
   "windows": ["main"],
   "permissions": [
     "core:default",
-    "foundation-models:default"
+    "apple-intelligence:default"
   ]
 }

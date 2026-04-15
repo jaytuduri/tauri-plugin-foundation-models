@@ -1,0 +1,11 @@
+"$schema" = "schemas/schema.json"
+
+[[permission]]
+identifier = "allow-img-availability"
+description = "Allows checking image generation availability and listing available styles."
+commands.allow = ["img_availability"]
+
+[[permission]]
+identifier = "allow-generate-image"
+description = "Allows programmatic on-device image generation via ImagePlayground."
+commands.allow = ["generate_image"]

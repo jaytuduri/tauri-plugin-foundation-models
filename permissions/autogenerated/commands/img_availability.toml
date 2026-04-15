@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-img-availability"
+description = "Enables the img_availability command without any pre-configured scope."
+commands.allow = ["img_availability"]
+
+[[permission]]
+identifier = "deny-img-availability"
+description = "Denies the img_availability command without any pre-configured scope."
+commands.deny = ["img_availability"]

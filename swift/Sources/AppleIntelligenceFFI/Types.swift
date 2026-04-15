@@ -18,3 +18,9 @@ public typealias ToolCallCallback = @convention(c) (
     UnsafePointer<CChar>?,
     UnsafePointer<CChar>?
 ) -> Void
+
+/// Fires once per generated image with a JSON payload:
+/// `{"index":<Int>,"dataBase64":"<base64-png>"}`.
+public typealias ImageCallback = @convention(c) (
+    UnsafeMutableRawPointer?, UnsafePointer<CChar>?
+) -> Void

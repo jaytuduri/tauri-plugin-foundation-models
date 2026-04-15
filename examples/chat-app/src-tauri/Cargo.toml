@@ -16,4 +16,4 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 tauri = { version = "2", features = [] }
-tauri-plugin-foundation-models = { path = "../../../" }
+tauri-plugin-apple-intelligence = { path = "../../../" }

@@ -11,6 +11,8 @@ const COMMANDS: &[&str] = &[
     "respond_stream",
     "close_session",
     "resolve_tool_call",
+    "img_availability",
+    "generate_image",
 ];
 
 fn main() {
@@ -69,6 +71,12 @@ fn main() {
     // The #available guards in Bridge.swift prevent any actual calls.
     println!("cargo:rustc-link-arg=-weak_framework");
     println!("cargo:rustc-link-arg=FoundationModels");
+    // Weak-link ImagePlayground (available macOS 15.4+; guards in ImageBridge.swift).
+    println!("cargo:rustc-link-arg=-weak_framework");
+    println!("cargo:rustc-link-arg=ImagePlayground");
+    // CoreGraphics and ImageIO are needed for PNG encoding of generated images.
+    println!("cargo:rustc-link-lib=framework=CoreGraphics");
+    println!("cargo:rustc-link-lib=framework=ImageIO");
 
     // Swift concurrency runtime — resolved from the macOS dyld shared cache.
     // Do NOT add the toolchain's swift-5.5/ path: those are back-deployment

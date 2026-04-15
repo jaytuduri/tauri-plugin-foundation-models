@@ -3401,7 +3401,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tauri-plugin-foundation-models"
+name = "tauri-plugin-apple-intelligence"
 version = "0.1.0"
 dependencies = [
  "log",

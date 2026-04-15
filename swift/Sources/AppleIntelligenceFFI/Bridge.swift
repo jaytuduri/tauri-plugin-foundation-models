@@ -11,12 +11,12 @@ import FoundationModels
 // MARK: - String helpers
 
 @inline(__always)
-private func cstrdup(_ s: String) -> UnsafeMutablePointer<CChar>? {
+func cstrdup(_ s: String) -> UnsafeMutablePointer<CChar>? {
     return s.withCString { strdup($0) }
 }
 
 @inline(__always)
-private func stringFromC(_ p: UnsafePointer<CChar>?) -> String {
+func stringFromC(_ p: UnsafePointer<CChar>?) -> String {
     guard let p = p else { return "" }
     return String(cString: p)
 }

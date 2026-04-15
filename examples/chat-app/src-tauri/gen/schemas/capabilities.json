@@ -1,1 +1,1 @@
-{"default":{"identifier":"default","description":"Default capabilities for the chat app","local":true,"windows":["main"],"permissions":["core:default","foundation-models:default"],"platforms":["macOS"]}}
+{"default":{"identifier":"default","description":"Default capabilities for the chat app","local":true,"windows":["main"],"permissions":["core:default","apple-intelligence:default"],"platforms":["macOS"]}}

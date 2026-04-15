@@ -1,6 +1,6 @@
 # Architecture
 
-This document describes the internal architecture of `tauri-plugin-foundation-models`.
+This document describes the internal architecture of `tauri-plugin-apple-intelligence`.
 
 ## Layer diagram
 
@@ -59,7 +59,7 @@ This document describes the internal architecture of `tauri-plugin-foundation-mo
 
 ### Request flow (one-shot generation)
 
-1. Frontend calls `generate(prompt)` which invokes the Tauri command `plugin:foundation-models|generate`.
+1. Frontend calls `generate(prompt)` which invokes the Tauri command `plugin:apple-intelligence|generate`.
 2. `commands::generate` creates an ephemeral session via `ai_create_session`, calls `ai_respond`, and closes the session.
 3. On the Swift side, `ai_respond` looks up the `LanguageModelSession` in `SessionStore`, calls `session.respond(to:)`, and fires the completion callback with the result.
 4. The Rust side receives the callback on a `oneshot::channel`, returns the text to the frontend.
@@ -77,7 +77,7 @@ Sessions are numeric IDs. The Swift `SessionStore` holds a map of `UInt64 -> Lan
 1. Tools are declared when creating a session (`createSession({ tools: [...] })`).
 2. On the Swift side, each tool becomes a `DynamicTool` that conforms to the `Tool` protocol.
 3. When the model invokes a tool, `DynamicTool.call()` dispatches through `ToolDispatcher`, which fires a C callback into Rust.
-4. Rust emits a Tauri event (`foundation-models://tool-call`) to the frontend.
+4. Rust emits a Tauri event (`apple-intelligence://tool-call`) to the frontend.
 5. The frontend's `registerToolHandlers` listener invokes the matching handler, then calls `resolve_tool_call` to send the result back.
 6. The result flows back to Swift via `ai_resolve_tool_call`, which resumes the suspended `CheckedContinuation`.
 

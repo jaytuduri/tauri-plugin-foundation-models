@@ -11,7 +11,7 @@ use std::ptr;
 use std::sync::mpsc;
 use std::time::Duration;
 
-use tauri_plugin_foundation_models as _; // force crate build
+use tauri_plugin_apple_intelligence as _; // force crate build
 
 #[link(name = "AppleIntelligenceFFI", kind = "static")]
 extern "C" {

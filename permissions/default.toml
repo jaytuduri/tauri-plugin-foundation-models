@@ -11,4 +11,6 @@ permissions = [
     "allow-respond-stream",
     "allow-close-session",
     "allow-resolve-tool-call",
+    "allow-img-availability",
+    "allow-generate-image",
 ]

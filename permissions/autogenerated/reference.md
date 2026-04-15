@@ -12,6 +12,8 @@ Default permissions for the Apple Intelligence plugin — grants access to all c
 - `allow-respond-stream`
 - `allow-close-session`
 - `allow-resolve-tool-call`
+- `allow-img-availability`
+- `allow-generate-image`
 
 ## Permission Table
 
@@ -25,7 +27,7 @@ Default permissions for the Apple Intelligence plugin — grants access to all c
 <tr>
 <td>
 
-`foundation-models:allow-availability`
+`apple-intelligence:allow-availability`
 
 </td>
 <td>
@@ -38,7 +40,7 @@ Enables the availability command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:deny-availability`
+`apple-intelligence:deny-availability`
 
 </td>
 <td>
@@ -51,7 +53,7 @@ Denies the availability command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:allow-close-session`
+`apple-intelligence:allow-close-session`
 
 </td>
 <td>
@@ -64,7 +66,7 @@ Enables the close_session command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:deny-close-session`
+`apple-intelligence:deny-close-session`
 
 </td>
 <td>
@@ -77,7 +79,7 @@ Denies the close_session command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:allow-create-session`
+`apple-intelligence:allow-create-session`
 
 </td>
 <td>
@@ -90,7 +92,7 @@ Enables the create_session command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:deny-create-session`
+`apple-intelligence:deny-create-session`
 
 </td>
 <td>
@@ -103,7 +105,7 @@ Denies the create_session command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:allow-generate`
+`apple-intelligence:allow-generate`
 
 </td>
 <td>
@@ -116,7 +118,7 @@ Enables the generate command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:deny-generate`
+`apple-intelligence:deny-generate`
 
 </td>
 <td>
@@ -129,7 +131,33 @@ Denies the generate command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:allow-generate-stream`
+`apple-intelligence:allow-generate-image`
+
+</td>
+<td>
+
+Enables the generate_image command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`apple-intelligence:deny-generate-image`
+
+</td>
+<td>
+
+Denies the generate_image command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`apple-intelligence:allow-generate-stream`
 
 </td>
 <td>
@@ -142,7 +170,7 @@ Enables the generate_stream command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:deny-generate-stream`
+`apple-intelligence:deny-generate-stream`
 
 </td>
 <td>
@@ -155,7 +183,33 @@ Denies the generate_stream command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:allow-resolve-tool-call`
+`apple-intelligence:allow-img-availability`
+
+</td>
+<td>
+
+Enables the img_availability command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`apple-intelligence:deny-img-availability`
+
+</td>
+<td>
+
+Denies the img_availability command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`apple-intelligence:allow-resolve-tool-call`
 
 </td>
 <td>
@@ -168,7 +222,7 @@ Enables the resolve_tool_call command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:deny-resolve-tool-call`
+`apple-intelligence:deny-resolve-tool-call`
 
 </td>
 <td>
@@ -181,7 +235,7 @@ Denies the resolve_tool_call command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:allow-respond`
+`apple-intelligence:allow-respond`
 
 </td>
 <td>
@@ -194,7 +248,7 @@ Enables the respond command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:deny-respond`
+`apple-intelligence:deny-respond`
 
 </td>
 <td>
@@ -207,7 +261,7 @@ Denies the respond command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:allow-respond-stream`
+`apple-intelligence:allow-respond-stream`
 
 </td>
 <td>
@@ -220,7 +274,7 @@ Enables the respond_stream command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:deny-respond-stream`
+`apple-intelligence:deny-respond-stream`
 
 </td>
 <td>
@@ -233,7 +287,7 @@ Denies the respond_stream command without any pre-configured scope.
 <tr>
 <td>
 
-`foundation-models:allow-availability`
+`apple-intelligence:allow-availability`
 
 </td>
 <td>
@@ -246,7 +300,7 @@ Allows checking Apple Intelligence availability.
 <tr>
 <td>
 
-`foundation-models:allow-generate`
+`apple-intelligence:allow-generate`
 
 </td>
 <td>
@@ -259,7 +313,7 @@ Allows one-shot text generation.
 <tr>
 <td>
 
-`foundation-models:allow-generate-stream`
+`apple-intelligence:allow-generate-stream`
 
 </td>
 <td>
@@ -272,7 +326,33 @@ Allows streaming text generation.
 <tr>
 <td>
 
-`foundation-models:allow-create-session`
+`apple-intelligence:allow-img-availability`
+
+</td>
+<td>
+
+Allows checking image generation availability and listing available styles.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`apple-intelligence:allow-generate-image`
+
+</td>
+<td>
+
+Allows programmatic on-device image generation via ImagePlayground.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`apple-intelligence:allow-create-session`
 
 </td>
 <td>
@@ -285,7 +365,7 @@ Allows creating a stateful language model session.
 <tr>
 <td>
 
-`foundation-models:allow-respond`
+`apple-intelligence:allow-respond`
 
 </td>
 <td>
@@ -298,7 +378,7 @@ Allows sending a prompt to an existing session.
 <tr>
 <td>
 
-`foundation-models:allow-respond-stream`
+`apple-intelligence:allow-respond-stream`
 
 </td>
 <td>
@@ -311,7 +391,7 @@ Allows sending a streaming prompt to an existing session.
 <tr>
 <td>
 
-`foundation-models:allow-close-session`
+`apple-intelligence:allow-close-session`
 
 </td>
 <td>
@@ -324,7 +404,7 @@ Allows closing an existing session.
 <tr>
 <td>
 
-`foundation-models:allow-resolve-tool-call`
+`apple-intelligence:allow-resolve-tool-call`
 
 </td>
 <td>

@@ -13,6 +13,10 @@ pub static PENDING_COMPLETIONS: Lazy<Mutex<HashMap<u64, oneshot::Sender<Completi
 pub static PENDING_STREAMS: Lazy<Mutex<HashMap<u64, StreamSink>>> =
     Lazy::new(|| Mutex::new(HashMap::new()));
 
+/// Image generation slot: one JSON string per image, plus a final completion sink.
+pub static PENDING_IMG_GEN: Lazy<Mutex<HashMap<u64, StreamSink>>> =
+    Lazy::new(|| Mutex::new(HashMap::new()));
+
 pub struct StreamSink {
     pub tokens: mpsc::UnboundedSender<String>,
     pub done: oneshot::Sender<CompletionPayload>,

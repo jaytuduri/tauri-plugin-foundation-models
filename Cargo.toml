@@ -1,10 +1,10 @@
 [package]
-name = "tauri-plugin-foundation-models"
+name = "tauri-plugin-apple-intelligence"
 version = "0.1.0"
 edition = "2021"
-description = "Tauri v2 plugin for Apple's on-device Foundation Models framework (Apple Intelligence) on macOS 26+"
+description = "Tauri v2 plugin for Apple Intelligence on macOS 26+ — text generation (FoundationModels) and image generation (ImagePlayground)"
 license = "MIT OR Apache-2.0"
-links = "foundation-models"
+links = "apple-intelligence"
 rust-version = "1.77"
 
 [package.metadata.docs.rs]

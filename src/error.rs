@@ -11,6 +11,13 @@ pub enum Error {
     UnsupportedLanguageOrLocale,
     #[error("FoundationModels error: {0}")]
     Native(String),
+    // ── ImagePlayground errors ───────────────────────────────────────────
+    #[error("image generation is not supported on this device")]
+    ImageNotSupported,
+    #[error("image creation failed")]
+    ImageCreationFailed,
+    #[error("face in source image is too small")]
+    ImageFaceInImageTooSmall,
     #[error("invalid input: {0}")]
     InvalidInput(String),
     #[error(transparent)]

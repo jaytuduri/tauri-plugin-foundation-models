@@ -2147,103 +2147,103 @@
         {
           "description": "Default permissions for the Apple Intelligence plugin — grants access to all commands needed for typical use.\n#### This default permission set includes:\n\n- `allow-availability`\n- `allow-generate`\n- `allow-generate-stream`\n- `allow-create-session`\n- `allow-respond`\n- `allow-respond-stream`\n- `allow-close-session`\n- `allow-resolve-tool-call`",
           "type": "string",
-          "const": "foundation-models:default",
+          "const": "apple-intelligence:default",
           "markdownDescription": "Default permissions for the Apple Intelligence plugin — grants access to all commands needed for typical use.\n#### This default permission set includes:\n\n- `allow-availability`\n- `allow-generate`\n- `allow-generate-stream`\n- `allow-create-session`\n- `allow-respond`\n- `allow-respond-stream`\n- `allow-close-session`\n- `allow-resolve-tool-call`"
         },
         {
           "description": "Allows checking Apple Intelligence availability.",
           "type": "string",
-          "const": "foundation-models:allow-availability",
+          "const": "apple-intelligence:allow-availability",
           "markdownDescription": "Allows checking Apple Intelligence availability."
         },
         {
           "description": "Allows closing an existing session.",
           "type": "string",
-          "const": "foundation-models:allow-close-session",
+          "const": "apple-intelligence:allow-close-session",
           "markdownDescription": "Allows closing an existing session."
         },
         {
           "description": "Allows creating a stateful language model session.",
           "type": "string",
-          "const": "foundation-models:allow-create-session",
+          "const": "apple-intelligence:allow-create-session",
           "markdownDescription": "Allows creating a stateful language model session."
         },
         {
           "description": "Allows one-shot text generation.",
           "type": "string",
-          "const": "foundation-models:allow-generate",
+          "const": "apple-intelligence:allow-generate",
           "markdownDescription": "Allows one-shot text generation."
         },
         {
           "description": "Allows streaming text generation.",
           "type": "string",
-          "const": "foundation-models:allow-generate-stream",
+          "const": "apple-intelligence:allow-generate-stream",
           "markdownDescription": "Allows streaming text generation."
         },
         {
           "description": "Allows the frontend to resolve a pending tool call from the model.",
           "type": "string",
-          "const": "foundation-models:allow-resolve-tool-call",
+          "const": "apple-intelligence:allow-resolve-tool-call",
           "markdownDescription": "Allows the frontend to resolve a pending tool call from the model."
         },
         {
           "description": "Allows sending a prompt to an existing session.",
           "type": "string",
-          "const": "foundation-models:allow-respond",
+          "const": "apple-intelligence:allow-respond",
           "markdownDescription": "Allows sending a prompt to an existing session."
         },
         {
           "description": "Allows sending a streaming prompt to an existing session.",
           "type": "string",
-          "const": "foundation-models:allow-respond-stream",
+          "const": "apple-intelligence:allow-respond-stream",
           "markdownDescription": "Allows sending a streaming prompt to an existing session."
         },
         {
           "description": "Denies the availability command without any pre-configured scope.",
           "type": "string",
-          "const": "foundation-models:deny-availability",
+          "const": "apple-intelligence:deny-availability",
           "markdownDescription": "Denies the availability command without any pre-configured scope."
         },
         {
           "description": "Denies the close_session command without any pre-configured scope.",
           "type": "string",
-          "const": "foundation-models:deny-close-session",
+          "const": "apple-intelligence:deny-close-session",
           "markdownDescription": "Denies the close_session command without any pre-configured scope."
         },
         {
           "description": "Denies the create_session command without any pre-configured scope.",
           "type": "string",
-          "const": "foundation-models:deny-create-session",
+          "const": "apple-intelligence:deny-create-session",
           "markdownDescription": "Denies the create_session command without any pre-configured scope."
         },
         {
           "description": "Denies the generate command without any pre-configured scope.",
           "type": "string",
-          "const": "foundation-models:deny-generate",
+          "const": "apple-intelligence:deny-generate",
           "markdownDescription": "Denies the generate command without any pre-configured scope."
         },
         {
           "description": "Denies the generate_stream command without any pre-configured scope.",
           "type": "string",
-          "const": "foundation-models:deny-generate-stream",
+          "const": "apple-intelligence:deny-generate-stream",
           "markdownDescription": "Denies the generate_stream command without any pre-configured scope."
         },
         {
           "description": "Denies the resolve_tool_call command without any pre-configured scope.",
           "type": "string",
-          "const": "foundation-models:deny-resolve-tool-call",
+          "const": "apple-intelligence:deny-resolve-tool-call",
           "markdownDescription": "Denies the resolve_tool_call command without any pre-configured scope."
         },
         {
           "description": "Denies the respond command without any pre-configured scope.",
           "type": "string",
-          "const": "foundation-models:deny-respond",
+          "const": "apple-intelligence:deny-respond",
           "markdownDescription": "Denies the respond command without any pre-configured scope."
         },
         {
           "description": "Denies the respond_stream command without any pre-configured scope.",
           "type": "string",
-          "const": "foundation-models:deny-respond-stream",
+          "const": "apple-intelligence:deny-respond-stream",
           "markdownDescription": "Denies the respond_stream command without any pre-configured scope."
         }
       ]

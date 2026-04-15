@@ -13,7 +13,7 @@ use tauri::{
 };
 
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-    Builder::new("foundation-models")
+    Builder::new("apple-intelligence")
         .invoke_handler(tauri::generate_handler![
             commands::availability,
             commands::generate,
@@ -23,6 +23,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             commands::respond_stream,
             commands::close_session,
             commands::resolve_tool_call,
+            commands::img_availability,
+            commands::generate_image,
         ])
         .setup(|app, _api| {
             commands::install_tool_call_emitter(app.app_handle().clone());
