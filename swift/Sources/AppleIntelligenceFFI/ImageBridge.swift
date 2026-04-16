@@ -29,7 +29,8 @@ public func img_availability(
         json.withCString { completion(ctx, 0, $0) }
         return 0
     }
-    Task.detached {
+    // ImageCreator requires @MainActor; backgroundCreationForbidden is thrown otherwise.
+    Task { @MainActor in
         do {
             let creator = try await ImageCreator()
             let styleList = creator.availableStyles.map { ["id": $0.id] }
@@ -39,6 +40,9 @@ public func img_availability(
             json.withCString { completion(ctx, 0, $0) }
         } catch ImageCreator.Error.notSupported {
             let json = #"{"available":false,"reason":"notSupported"}"#
+            json.withCString { completion(ctx, 0, $0) }
+        } catch ImageCreator.Error.backgroundCreationForbidden {
+            let json = #"{"available":false,"reason":"backgroundCreationForbidden"}"#
             json.withCString { completion(ctx, 0, $0) }
         } catch {
             let msg = "imageCreatorInitFailed:\(error)"
@@ -79,7 +83,7 @@ public func img_generate(
     let optsStr      = stringFromC(optionsJson)
     let clampedLimit = max(1, min(Int(limit), 4))
 
-    Task.detached {
+    Task { @MainActor in
         do {
             let creator = try await ImageCreator()
 
@@ -154,10 +158,18 @@ public func img_generate(
 
         } catch ImageCreator.Error.notSupported {
             "notSupported".withCString { completion(ctx, 1, $0) }
+        } catch ImageCreator.Error.backgroundCreationForbidden {
+            "backgroundCreationForbidden".withCString { completion(ctx, 1, $0) }
         } catch ImageCreator.Error.creationFailed {
             "creationFailed".withCString { completion(ctx, 1, $0) }
+        } catch ImageCreator.Error.creationCancelled {
+            "creationCancelled".withCString { completion(ctx, 1, $0) }
         } catch ImageCreator.Error.faceInImageTooSmall {
             "faceInImageTooSmall".withCString { completion(ctx, 1, $0) }
+        } catch ImageCreator.Error.unsupportedLanguage {
+            "unsupportedLanguage".withCString { completion(ctx, 1, $0) }
+        } catch ImageCreator.Error.unsupportedInputImage {
+            "unsupportedInputImage".withCString { completion(ctx, 1, $0) }
         } catch {
             "\(error)".withCString { completion(ctx, 1, $0) }
         }

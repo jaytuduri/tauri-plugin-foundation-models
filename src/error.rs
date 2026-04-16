@@ -14,10 +14,18 @@ pub enum Error {
     // ── ImagePlayground errors ───────────────────────────────────────────
     #[error("image generation is not supported on this device")]
     ImageNotSupported,
+    #[error("image generation requires the app to be in the foreground")]
+    ImageBackgroundCreationForbidden,
     #[error("image creation failed")]
     ImageCreationFailed,
+    #[error("image creation was cancelled")]
+    ImageCreationCancelled,
     #[error("face in source image is too small")]
     ImageFaceInImageTooSmall,
+    #[error("image generation does not support this language")]
+    ImageUnsupportedLanguage,
+    #[error("image generation does not support this input image")]
+    ImageUnsupportedInputImage,
     #[error("invalid input: {0}")]
     InvalidInput(String),
     #[error(transparent)]

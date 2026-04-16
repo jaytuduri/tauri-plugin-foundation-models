@@ -357,8 +357,12 @@ pub struct ImageAvailabilityStatus {
 fn map_img_error(msg: String) -> Error {
     match msg.as_str() {
         "notSupported" => Error::ImageNotSupported,
+        "backgroundCreationForbidden" => Error::ImageBackgroundCreationForbidden,
         "creationFailed" => Error::ImageCreationFailed,
+        "creationCancelled" => Error::ImageCreationCancelled,
         "faceInImageTooSmall" => Error::ImageFaceInImageTooSmall,
+        "unsupportedLanguage" => Error::ImageUnsupportedLanguage,
+        "unsupportedInputImage" => Error::ImageUnsupportedInputImage,
         "noConceptsProvided" => Error::InvalidInput("no concepts provided".into()),
         "noStylesAvailable" => Error::InvalidInput("no image styles available on this device".into()),
         "styleNotFound" => Error::InvalidInput("requested style id not found".into()),

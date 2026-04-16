@@ -1,4 +1,4 @@
-import { imgAvailability, generateImages } from 'tauri-plugin-apple-intelligence-api'
+import { generateImages, imgAvailability } from 'tauri-plugin-apple-intelligence-api'
 
 const MAX_IMAGES = 4
 
@@ -45,41 +45,85 @@ function addPlaceholder() {
   return card
 }
 
+const SVG_COPY = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`
+const SVG_CHECK = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+const SVG_DOWNLOAD = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`
+
+function b64ToBlob(b64) {
+  const bin = atob(b64)
+  const bytes = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+  return new Blob([bytes], { type: 'image/png' })
+}
+
+function flashButton(btn, originalSvg) {
+  btn.innerHTML = SVG_CHECK
+  setTimeout(() => { btn.innerHTML = originalSvg }, 1500)
+}
+
+function makeActionButton(svg, title, onClick) {
+  const btn = document.createElement('button')
+  btn.className = 'img-action'
+  btn.title = title
+  btn.innerHTML = svg
+  btn.addEventListener('click', onClick)
+  return btn
+}
+
 function fillPlaceholder(card, dataBase64, index) {
   card.className = 'img-card'
   const img = document.createElement('img')
   img.src = `data:image/png;base64,${dataBase64}`
   img.alt = `Generated image ${index + 1}`
+  const blob = b64ToBlob(dataBase64)
+
+  const footer = document.createElement('div')
+  footer.className = 'img-footer'
+
+  const copyBtn = makeActionButton(SVG_COPY, 'Copy to clipboard', async () => {
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+      flashButton(copyBtn, SVG_COPY)
+    } catch { /* clipboard not available */ }
+  })
+
   const label = document.createElement('div')
   label.className = 'img-label'
   label.textContent = `Image ${index + 1}`
-  card.replaceChildren(img, label)
+
+  const dlBtn = makeActionButton(SVG_DOWNLOAD, 'Download', () => {
+    const a = document.createElement('a')
+    a.href = img.src
+    a.download = `image-${index + 1}.png`
+    a.click()
+    flashButton(dlBtn, SVG_DOWNLOAD)
+  })
+
+  footer.append(copyBtn, label, dlBtn)
+  card.replaceChildren(img, footer)
 }
 
 async function init() {
   try {
     const status = await imgAvailability()
-
     if (!status.available) {
-      setStatus('error', 'Unavailable')
-      showNotice(`Image generation unavailable: ${status.reason}`, true)
+      setStatus('error', `Unavailable: ${status.reason}`)
+      showNotice(`Image generation is not available: ${status.reason}`, true)
       return
     }
-
-    for (const style of status.styles ?? []) {
+    for (const style of status.styles) {
       const opt = document.createElement('option')
       opt.value = style.id
-      opt.textContent = style.name ?? style.id
+      opt.textContent = style.id
       styleSelect.appendChild(opt)
     }
-
     setStatus('ready', 'On-device model ready')
     showNotice('Describe an image and tap Generate. Images appear as they are created.')
     setFormEnabled(true)
     promptEl.focus()
   } catch (err) {
-    setStatus('error', 'Error')
-    showNotice(`Failed to initialise: ${err}`, true)
+    setStatus('error', 'Unavailable')
+    showNotice(`Failed to check availability: ${err}`, true)
   }
 }
 
@@ -111,7 +155,7 @@ async function generate() {
         fillPlaceholder(placeholders[received], img.dataBase64, received)
         received++
       },
-      { styleId, limit },
+      { styleId, limit, creationVariety: limit > 1 ? 'high' : undefined },
     )
   } catch (err) {
     for (let i = received; i < placeholders.length; i++) {
